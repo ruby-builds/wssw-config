@@ -1,17 +1,149 @@
-/* Minimal Debug Keymap */
+/*
+ * Copyright (c) 2020 The ZMK Contributors
+ *
+ * SPDX-License-Identifier: MIT
+ */
+
 #include <behaviors.dtsi>
 #include <dt-bindings/zmk/keys.h>
 #include <dt-bindings/zmk/bt.h>
 
+#define A1 0
+#define A2 1
+#define NUMNAV 2
+#define SYM 3
+#define FUN 4
+
 / {
+    combos {
+        compatible = "zmk,combos";
+        
+        /* A1 Combos */
+        combo_tab { key-positions = <0 1>; bindings = <&kp TAB>; layers = <A1>; };
+        combo_esc { key-positions = <1 2>; bindings = <&kp ESC>; layers = <A1>; };
+        combo_del { key-positions = <3 4>; bindings = <&kp DEL>; layers = <A1>; };
+        combo_bsp { key-positions = <4 5>; bindings = <&kp BSPC>; layers = <A1>; };
+        combo_ent { key-positions = <5 13>; bindings = <&kp ENTER>; layers = <A1>; };
+        combo_cut { key-positions = <6 7>; bindings = <&kp LC(X)>; layers = <A1>; };
+        combo_copy { key-positions = <7 8>; bindings = <&kp LC(C)>; layers = <A1>; };
+        combo_paste { key-positions = <8 9>; bindings = <&kp LC(V)>; layers = <A1>; };
+        combo_undo { key-positions = <10 11>; bindings = <&kp LC(Z)>; layers = <A1>; };
+        combo_redo { key-positions = <11 12>; bindings = <&kp LC(Y)>; layers = <A1>; };
+        combo_sticky_shift { key-positions = <0 6>; bindings = <&sk LSHIFT>; layers = <A1>; };
+        combo_fun { key-positions = <13 15>; bindings = <&sl FUN>; layers = <A1>; }; /* 13 + Right Thumb (15) */
+
+        /* A2 Combos */
+        combo_qu { key-positions = <5 12>; bindings = <&kp DQT>; layers = <A2>; };
+        combo_sqt { key-positions = <4 11>; bindings = <&kp SQT>; layers = <A2>; };
+        combo_colon { key-positions = <11 12>; bindings = <&kp COLON>; layers = <A2>; };
+        combo_semi { key-positions = <12 13>; bindings = <&kp SEMI>; layers = <A2>; };
+        combo_qmark { key-positions = <5 13>; bindings = <&kp QMARK>; layers = <A2>; };
+
+        /* NUMNAV Combos */
+        combo_7 { key-positions = <0 7>; bindings = <&kp N7>; layers = <NUMNAV>; };
+        combo_8 { key-positions = <1 8>; bindings = <&kp N8>; layers = <NUMNAV>; };
+        combo_9 { key-positions = <2 9>; bindings = <&kp N9>; layers = <NUMNAV>; };
+        combo_pgup { key-positions = <4 11>; bindings = <&kp PG_UP>; layers = <NUMNAV>; };
+        combo_pgdn { key-positions = <5 12>; bindings = <&kp PG_DN>; layers = <NUMNAV>; };
+
+        /* SYM Combos */
+        combo_grave { key-positions = <0 1>; bindings = <&kp GRAVE>; layers = <SYM>; };
+        combo_tilde { key-positions = <1 2>; bindings = <&kp TILDE>; layers = <SYM>; };
+        combo_lpar { key-positions = <0 7>; bindings = <&kp LPAR>; layers = <SYM>; };
+        combo_lbkt { key-positions = <1 8>; bindings = <&kp LBKT>; layers = <SYM>; };
+        combo_lbrc { key-positions = <2 9>; bindings = <&kp LBRC>; layers = <SYM>; };
+        combo_rbrc { key-positions = <3 10>; bindings = <&kp RBRC>; layers = <SYM>; };
+        combo_rbkt { key-positions = <4 11>; bindings = <&kp RBKT>; layers = <SYM>; };
+        combo_rpar { key-positions = <5 12>; bindings = <&kp RPAR>; layers = <SYM>; };
+        combo_slash { key-positions = <12 13>; bindings = <&kp SLASH>; layers = <SYM>; };
+        combo_lt { key-positions = <0 6>; bindings = <&kp LT>; layers = <SYM>; };
+        combo_gt { key-positions = <5 13>; bindings = <&kp GT>; layers = <SYM>; };
+    };
+
+    behaviors {
+        hm: homerow_mods {
+            compatible = "zmk,behavior-hold-tap";
+            label = "HOMEROW_MODS";
+            #binding-cells = <2>;
+            flavor = "balanced";
+            tapping-term-ms = <200>;
+            quick-tap-ms = <150>;
+            bindings = <&kp>, <&kp>;
+        };
+        
+        hl: hm_left {
+            compatible = "zmk,behavior-hold-tap";
+            label = "HM_L";
+            #binding-cells = <2>;
+            flavor = "balanced";
+            tapping-term-ms = <200>;
+            quick-tap-ms = <150>;
+            bindings = <&kp>, <&kp>;
+            hold-trigger-key-positions = <3 4 5 10 11 12 13 15>; /* Right Hand + RThumb (15) */
+        };
+
+        hr: hm_right {
+            compatible = "zmk,behavior-hold-tap";
+            label = "HM_R";
+            #binding-cells = <2>;
+            flavor = "balanced";
+            tapping-term-ms = <200>;
+            quick-tap-ms = <150>;
+            bindings = <&kp>, <&kp>;
+            hold-trigger-key-positions = <0 1 2 6 7 8 9 14>; /* Left Hand + LThumb (14) */
+        };
+    };
+
     keymap {
         compatible = "zmk,keymap";
-        
-        default_layer {
+
+        /* A1 */
+        a1_layer {
+            label = "A1";
             bindings = <
-                &kp A &kp B &kp C    &kp D &kp E &kp F
-                &kp G &kp H &kp I &kp J    &kp K &kp L &kp M &kp N
-                &kp O &kp P
+                &hl LGUI R      &hl LALT T      &hl LSHIFT S      &hr RSHIFT H    &hr RALT A      &hr RGUI I
+                &hl LCTRL N     &kp L           &kp D             &kp Y           &kp M           &kp O           &kp U           &hr RCTRL E
+                                                &sl A2            &lt SYM SPACE
+            >;
+        };
+
+        /* A2 */
+        a2_layer {
+            label = "A2";
+            bindings = <
+                &kp W           &kp B           &kp C             &kp F           &kp Z           &kp DOT
+                &kp P           &kp X           &kp V             &kp G           &kp K           &kp Q           &kp COMMA       &kp J
+                                                &mo NUMNAV        &trans
+            >;
+        };
+
+        /* NUMNAV */
+        numnav_layer {
+            label = "NUMNAV";
+            bindings = <
+                &kp N1          &kp N2          &kp N3            &kp LEFT        &kp UP          &kp DOWN
+                &kp N0          &kp N4          &kp N5            &kp N6          &kp HOME        &kp END         &none           &kp RIGHT
+                                                &trans            &trans
+            >;
+        };
+
+        /* SYM */
+        sym_layer {
+            label = "SYM";
+            bindings = <
+                &kp AT          &kp HASH        &kp DOLLAR        &kp CARET       &kp AMPERSAND   &kp ASTERISK
+                &kp EXCL        &kp MINUS       &kp UNDER         &kp PRCNT       &kp EQUAL       &kp PLUS        &kp BSLH        &kp PIPE
+                                                &trans            &trans
+            >;
+        };
+
+        /* FUN */
+        fun_layer {
+            label = "FUN";
+            bindings = <
+                &kp F1          &kp F2          &kp F3            &kp F7          &kp F8          &kp F9
+                &none           &kp F4          &kp F5            &kp F6          &kp F10         &kp F11         &kp F12         &trans
+                                                &trans            &trans
             >;
         };
     };
