@@ -7,264 +7,168 @@
 #include <behaviors.dtsi>
 #include <dt-bindings/zmk/keys.h>
 #include <dt-bindings/zmk/bt.h>
-#include <dt-bindings/zmk/mouse.h>
 
-#define APT 0
-#define NUM 1
-#define NAV 2
+#define A1 0
+#define A2 1
+#define NUMNAV 2
 #define SYM 3
 #define FUN 4
-
-&caps_word {
-    continue-list = <UNDERSCORE MINUS BSPC LSHFT RSHFT>;
-};
-
-/ {
-    macros {
-        // promising candidate, only problem: impossible to hold shift through
-        // the activation and still have it registered as held afterwards
-        macro_shiftable_sch: macro_shiftable_sch {
-            label = "Macro_shiftable_sch";
-            compatible = "zmk,behavior-macro";
-            #binding-cells = <0>;
-            bindings = <
-                &macro_tap &kp Q
-                &macro_release &kp RSHIFT
-                &macro_tap &kp U
-            >;
-            tap-ms = <10>;
-        };
-    };
-};
-
-#define LAYER_COMBO(NAME, BINDINGS, KEYPOS, LAYERS) \
-combo_##NAME { \
-    timeout-ms = <20>; \
-    bindings = <BINDINGS>; \
-    key-positions = <KEYPOS>; \
-    layers = <LAYERS>; \
-};
-
-#define COMBO(NAME, BINDINGS, KEYPOS) \
-combo_##NAME { \
-    timeout-ms = <20>; \
-    bindings = <BINDINGS>; \
-    key-positions = <KEYPOS>; \
-    layers = <0>; \
-};
-
-#define SLOWCOMBO(NAME, BINDINGS, KEYPOS) \
-combo_##NAME { \
-    timeout-ms = <40>; \
-    bindings = <BINDINGS>; \
-    key-positions = <KEYPOS>; \
-    layers = <0>; \
-};
-
-#define TCOMBO(NAME, BINDINGS, KEYPOS, TIMEOUT) \
-combo_##NAME { \
-    timeout-ms = <TIMEOUT>; \
-    bindings = <BINDINGS>; \
-    key-positions = <KEYPOS>; \
-    layers = <0>; \
-};
-
-#define COMBOS_TOP_ROW(LTPR, LTRM, LTMI, MTII, RTIM, RTMR, RTRP) \
-    SLOWCOMBO(_ltpr, LTPR, 6 0) \
-    COMBO(_ltrm, LTRM, 0 1) \
-    COMBO(_ltmi, LTMI, 1 2) \
-    SLOWCOMBO(_mtii, MTII, 2 3) \
-    COMBO(_rtim, RTIM, 3 4) \
-    COMBO(_rtmr, RTMR, 4 5) \
-    SLOWCOMBO(_rtrp, RTRP, 5 13)
-
-#define COMBOS_BOT_ROW(LBRM, LBMI, MBII, RBIM, RBMR) \
-    COMBO(_lbrm, LBRM, 7 8) \
-    COMBO(_lbmi, LBMI, 8 9) \
-    SLOWCOMBO(_mbii, MBII, 9 10) \
-    COMBO(_rbim, RBIM, 10 11) \
-    COMBO(_rbmr, RBMR, 11 12)
-
-//          00  01  02          03  04  05
-//      06  07  08  09          10  11  12  13
-//                  14  15  16  17
 
 / {
     combos {
         compatible = "zmk,combos";
+        
+        /* A1 Combos */
+        combo_tab { key-positions = <0 1>; bindings = <&kp TAB>; layers = <A1>; };
+        combo_esc { key-positions = <1 2>; bindings = <&kp ESC>; layers = <A1>; };
+        combo_del { key-positions = <3 4>; bindings = <&kp DEL>; layers = <A1>; };
+        combo_bsp { key-positions = <4 5>; bindings = <&kp BSPC>; layers = <A1>; };
+        combo_ent { key-positions = <5 13>; bindings = <&kp ENTER>; layers = <A1>; };
+        combo_cut { key-positions = <6 7>; bindings = <&kp LC(X)>; layers = <A1>; };
+        combo_copy { key-positions = <7 8>; bindings = <&kp LC(C)>; layers = <A1>; };
+        combo_paste { key-positions = <8 9>; bindings = <&kp LC(V)>; layers = <A1>; };
+        combo_undo { key-positions = <10 11>; bindings = <&kp LC(Z)>; layers = <A1>; };
+        combo_redo { key-positions = <11 12>; bindings = <&kp LC(Y)>; layers = <A1>; };
+        combo_sticky_shift { key-positions = <0 6>; bindings = <&sk LSHIFT>; layers = <A1>; };
+        combo_fun { key-positions = <13 16>; bindings = <&sl FUN>; layers = <A1>; }; /* 13+16 (Right Pinky + RThumb 16) */
+        combo_fun_alt { key-positions = <13 17>; bindings = <&sl FUN>; layers = <A1>; }; /* 13+17 (Right Pinky + RThumb 17) */
 
-        /* alphas */
-        COMBOS_TOP_ROW(&kp W, &kp M, &kp B, &kp K, &kp V, &comsem, &dotcol)
-        COMBOS_BOT_ROW(&kp F, &kp P, &kp J, &kp X, &kp Z)
+        /* A2 Combos */
+        combo_qu { key-positions = <5 12>; bindings = <&kp DQT>; layers = <A2>; }; /* QU = Quotes */
+        combo_sqt { key-positions = <4 11>; bindings = <&kp SQT>; layers = <A2>; }; /* Z+Q = Single Quote */
+        combo_colon { key-positions = <11 12>; bindings = <&kp COLON>; layers = <A2>; }; /* Q+, = Colon */
+        combo_semi { key-positions = <12 13>; bindings = <&kp SEMI>; layers = <A2>; };
+        combo_qmark { key-positions = <5 13>; bindings = <&kp QMARK>; layers = <A2>; };
 
-        /* usually on base layer */
-        COMBO(q, &kp Q, 7 9)
-        COMBO(k, &kp K, 1 9)
-        COMBO(j, &kp J, 4 10)
-        COMBO(shiftablesch, &macro_shiftable_sch, 0 2)
-        COMBO(enter, &kp ENTER, 10 11 12)
-        COMBO(esc, &kp ESC, 2 6)
-        COMBO(semi, &kp SEMICOLON, 11 17)
-        COMBO(colon, &kp COLON, 13 17)
-        COMBO(minus, &kp MINUS, 11 12 17)
-        COMBO(slash, &kp SLASH, 10 17)
-        COMBO(esc2, &kp ESC, 8 9 15)
-        COMBO(tab, &kp TAB, 7 8 9)
-        COMBO(sqt, &kp SQT, 12 13 17)
+        /* NUMNAV Combos */
+        combo_7 { key-positions = <0 7>; bindings = <&kp N7>; layers = <NUMNAV>; };
+        combo_8 { key-positions = <1 8>; bindings = <&kp N8>; layers = <NUMNAV>; };
+        combo_9 { key-positions = <2 9>; bindings = <&kp N9>; layers = <NUMNAV>; };
+        combo_pgup { key-positions = <4 11>; bindings = <&kp PG_UP>; layers = <NUMNAV>; };
+        combo_pgdn { key-positions = <5 12>; bindings = <&kp PG_DN>; layers = <NUMNAV>; };
 
-        /* parentheticals */
-        COMBO(lt, &kp LT, 0 9)
-        COMBO(lbrc, &kp LBRC, 0 7)
-        COMBO(lbkt, &kp LBKT, 1 8)
-        COMBO(lpar, &kp LPAR, 2 9)
-        COMBO(rt, &kp GT, 5 10)
-        COMBO(rpar, &kp RPAR, 3 10)
-        COMBO(rbkt, &kp RBKT, 4 11)
-        COMBO(rbrc, &kp RBRC, 5 12)
-
-        /* caps */
-        COMBO(caps, &caps_word, 1 4)
-        COMBO(capslock, &kp CAPSLOCK, 2 3)
-
-        /* deletion */
-        COMBO(bspc, &kp BSPC, 3 5)
-        SLOWCOMBO(del, &kp DEL, 4 13)
-        COMBO(delword, &kp LC(BSPC), 3 13)
-
-        /* numbers */
-        LAYER_COMBO(R7, &kp N7, 10 11, 1)
-        LAYER_COMBO(R8, &kp N8, 3 4, 1)
-        LAYER_COMBO(R9, &kp N9, 11 12, 1)
-        LAYER_COMBO(R0, &kp N0, 4 5, 1)
-        LAYER_COMBO(Rplus, &kp PLUS, 4 10, 1)
-
-        /* fun */ 
-        LAYER_COMBO(RF7, &kp F7, 10 11, 4)
-        LAYER_COMBO(RF8, &kp F8, 3 4, 4)
-        LAYER_COMBO(RF9, &kp F9, 11 12, 4)
-        LAYER_COMBO(RF10, &kp F10, 4 5, 4)
+        /* SYM Combos */
+        combo_grave { key-positions = <0 1>; bindings = <&kp GRAVE>; layers = <SYM>; };
+        combo_tilde { key-positions = <1 2>; bindings = <&kp TILDE>; layers = <SYM>; };
+        combo_lpar { key-positions = <0 7>; bindings = <&kp LPAR>; layers = <SYM>; };
+        combo_lbkt { key-positions = <1 8>; bindings = <&kp LBKT>; layers = <SYM>; };
+        combo_lbrc { key-positions = <2 9>; bindings = <&kp LBRC>; layers = <SYM>; };
+        combo_rbrc { key-positions = <3 10>; bindings = <&kp RBRC>; layers = <SYM>; };
+        combo_rbkt { key-positions = <4 11>; bindings = <&kp RBKT>; layers = <SYM>; };
+        combo_rpar { key-positions = <5 12>; bindings = <&kp RPAR>; layers = <SYM>; };
+        combo_slash { key-positions = <12 13>; bindings = <&kp SLASH>; layers = <SYM>; };
+        combo_lt { key-positions = <0 6>; bindings = <&kp LT>; layers = <SYM>; };
+        combo_gt { key-positions = <5 13>; bindings = <&kp GT>; layers = <SYM>; };
     };
-};
 
-//          00  01  02          03  04  05
-//      06  07  08  09          10  11  12  13
-//                  14  15  16  17
-
-/ {
     behaviors {
-        hl: homerow_mods_left {
+        /* Hold-Tap Modifiers */
+        hm: homerow_mods {
             compatible = "zmk,behavior-hold-tap";
-            label = "homerow mods left";
+            label = "HOMEROW_MODS";
             #binding-cells = <2>;
             flavor = "balanced";
-            tapping-term-ms = <150>;
-            quick-tap-ms = <100>;
-            bindings = <&kp &kp>;
-            hold-trigger-key-positions = <3 4 5 10 11 12 13 16 17>;
+            tapping-term-ms = <200>;
+            quick-tap-ms = <150>;
+            bindings = <&kp>, <&kp>;
         };
-
-        hr: homerow_mods_right {
+        
+        hl: hm_left {
             compatible = "zmk,behavior-hold-tap";
-            label = "homerow mods right";
+            label = "HM_L";
             #binding-cells = <2>;
             flavor = "balanced";
-            tapping-term-ms = <150>;
-            quick-tap-ms = <100>;
-            bindings = <&kp &kp>;
-            hold-trigger-key-positions = <0 1 2 6 7 8 9 14 15>;
+            tapping-term-ms = <200>;
+            quick-tap-ms = <150>;
+            bindings = <&kp>, <&kp>;
+            hold-trigger-key-positions = <3 4 5 10 11 12 13 16 17>; /* Right Hand + RThumbs (16,17) */
         };
 
-        my_lt: my_layer_taps {
+        hr: hm_right {
             compatible = "zmk,behavior-hold-tap";
-            label = "my layer taps";
+            label = "HM_R";
             #binding-cells = <2>;
-            flavor = "tap-preferred";
-            tapping-term-ms = <160>;
-            quick-tap-ms = <100>;
-            bindings = <&mo &kp>, <&kp>;
-        };
-
-        dotcol: dot_colon {
-            compatible = "zmk,behavior-mod-morph";
-            label = "DOT_COL";
-            #binding-cells = <0>;
-            bindings = <&kp DOT &kp COLON>;
-            mods = <(MOD_LSFT | MOD_RSFT)>;
-        };
-
-        comsem: comma_semicolon {
-            compatible = "zmk,behavior-mod-morph";
-            label = "COM_SEM";
-            #binding-cells = <0>;
-            bindings = <&kp COMMA &kp SEMI>;
-            mods = <(MOD_LSFT | MOD_RSFT)>;
+            flavor = "balanced";
+            tapping-term-ms = <200>;
+            quick-tap-ms = <150>;
+            bindings = <&kp>, <&kp>;
+            hold-trigger-key-positions = <0 1 2 6 7 8 9 14 15>; /* Left Hand + LThumbs (14,15) */
         };
     };
-};
-/ {
-  conditional_layers {
-      compatible = "zmk,conditional-layers";
-  
-      fun {
-          if-layers = <2 3>;
-          then-layer = <4>;
-      };
-  };
-};
 
-/ {
     keymap {
         compatible = "zmk,keymap";
 
-        aptmak {
-            label = "APT";
-
+        /*
+         * A1 (Base)
+         * R(G) T(A) S(S) | H(S) A(A) I(G)
+         * N(C) L    D    Y   | M    O    U    E(C)
+         *      SL(A2)        LT(SYM, SPC)
+         */
+        a1_layer {
+            label = "A1";
             bindings = <
-                &hl LALT S     &hl LGUI T     &hl LSHFT H      &hr RSHFT N    &hr RGUI A     &hr LALT I
-                &hl LCTRL R    &kp C          &kp G            &my_lt NUM D          &kp L          &kp U          &kp Y          &hr RCTRL O
-                                &my_lt NAV SPACE  &my_lt NAV SPACE  &my_lt SYM E  &my_lt SYM E
+                &hl LGUI R      &hl LALT T      &hl LSHIFT S      &hr RSHIFT H    &hr RALT A      &hr RGUI I
+                &hl LCTRL N     &kp L           &kp D             &kp Y           &kp M           &kp O           &kp U           &hr RCTRL E
+                                                &sl A2            &sl A2          &lt SYM SPACE   &lt SYM SPACE
             >;
         };
 
-        numbers {
-            label = "NUM";
-
+        /*
+         * A2
+         * W B C | F Z .
+         * P X V G | K Q , J
+         *   NUM      trans
+         */
+        a2_layer {
+            label = "A2";
             bindings = <
-                &hl LALT MINUS &hl LGUI STAR  &hl LSHFT SLASH  &kp N4         &kp N5         &kp N6
-                &hl LCTRL PLUS &trans         &trans          &kp N7         &kp N1         &kp N2         &kp N3         &dotcol
-                                &trans         &trans           &trans         &trans
+                &kp W           &kp B           &kp C             &kp F           &kp Z           &kp DOT
+                &kp P           &kp X           &kp V             &kp G           &kp K           &kp Q           &kp COMMA       &kp J
+                                                &mo NUMNAV        &mo NUMNAV      &trans          &trans
             >;
         };
 
-        navigation {
-            label = "NAV";
-
+        /*
+         * NUMNAV
+         * 1 2 3 | Left Up Down
+         * 0 4 5 6 | Home End _ Right
+         */
+        numnav_layer {
+            label = "NUMNAV";
             bindings = <
-                &sk LALT       &sk LGUI       &sk LSHFT        &kp LEFT       &kp DOWN       &kp UP
-                &sk LCTRL      &kp C_VOL_UP   &kp PG_UP        &kp C_VOL_DN   &kp HOME       &kp PG_DN      &kp END        &kp RIGHT
-                                &trans         &trans           &trans       &trans
+                &kp N1          &kp N2          &kp N3            &kp LEFT        &kp UP          &kp DOWN
+                &kp N0          &kp N4          &kp N5            &kp N6          &kp HOME        &kp END         &none           &kp RIGHT
+                                                &trans            &trans          &trans          &trans
             >;
         };
 
-        symbols {
+        /*
+         * SYM
+         * @ # $ | ^ & *
+         * ! - _ % | = + \ |
+         */
+        sym_layer {
             label = "SYM";
-
             bindings = <
-                &kp AT         &kp HASH       &kp DOLLAR       &kp AMPERSAND  &kp ASTERISK   &kp PERCENT
-                &kp EXCL       &kp GRAVE      &kp DQT          &kp UNDERSCORE &kp BACKSLASH  &kp PIPE       &kp EQUAL      &kp CARET
-                                &kp TILDE      &trans           &trans         &trans
+                &kp AT          &kp HASH        &kp DOLLAR        &kp CARET       &kp AMPERSAND   &kp ASTERISK
+                &kp EXCL        &kp MINUS       &kp UNDER         &kp PRCNT       &kp EQUAL       &kp PLUS        &kp BSLH        &kp PIPE
+                                                &trans            &trans          &trans          &trans
             >;
         };
 
-        function {
+        /*
+         * FUN
+         * F1 F2 F3 | F7 F8 F9
+         * Boot F4 F5 F6 | F10 F11 F12
+         */
+        fun_layer {
             label = "FUN";
-
             bindings = <
-                &trans         &kp F12          &kp F11        &kp F4         &kp F5         &kp F6
-                &bt BT_SEL 1    &bt BT_SEL 2         &trans           &trans         &kp F1         &kp F2         &kp F3         &bt BT_CLR_ALL
-                                &trans         &trans           &trans         &trans
+                &kp F1          &kp F2          &kp F3            &kp F7          &kp F8          &kp F9
+                &bootloader     &kp F4          &kp F5            &kp F6          &kp F10         &kp F11         &kp F12         &trans
+                                                &trans            &trans          &trans          &trans
             >;
         };
     };
 };
-
