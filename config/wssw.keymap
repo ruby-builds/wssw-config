@@ -31,7 +31,7 @@
         combo_redo { key-positions = <11 12>; bindings = <&kp LC(Y)>; layers = <A1>; };
         combo_sticky_shift { key-positions = <0 6>; bindings = <&sk LSHIFT>; layers = <A1>; };
         combo_fun { key-positions = <13 16>; bindings = <&sl FUN>; layers = <A1>; }; /* 13+16 (Right Pinky + RThumb 16) */
-        combo_fun_alt { key-positions = <13 17>; bindings = <&sl FUN>; layers = <A1>; }; /* 13+17 (Right Pinky + RThumb 17) */
+        /* Index 17 removed for debug */
 
         /* A2 Combos */
         combo_qu { key-positions = <5 12>; bindings = <&kp DQT>; layers = <A2>; }; /* QU = Quotes */
@@ -81,7 +81,7 @@
             tapping-term-ms = <200>;
             quick-tap-ms = <150>;
             bindings = <&kp>, <&kp>;
-            hold-trigger-key-positions = <3 4 5 10 11 12 13 16 17>; /* Right Hand + RThumbs (16,17) */
+            hold-trigger-key-positions = <3 4 5 10 11 12 13 16>; /* Right Hand + RThumbs (16) */
         };
 
         hr: hm_right {
