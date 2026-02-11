@@ -27,3 +27,7 @@ include:
   - board: xiao_ble
     shield: wssw_dongle prospector_adapter
 
+  - board: xiao_ble
+    shield: settings_reset
+
+
