@@ -23,3 +23,6 @@ include:
     shield: wssw_left
   - board: nice_nano_v2
     shield: wssw_right
+  - board: xiao_ble
+    shield: wssw_dongle prospector_adapter
+
